@@ -25,7 +25,15 @@ except FileNotFoundError:
     documents = pickle.load(open("../data_preparation/data/documents.pkl", "rb"))
     index = faiss.read_index("../data_preparation/data/faiss_index.index")
 
-model = SentenceTransformer('all-MiniLM-L6-v2')
+# Pre-load everything during startup
+model = SentenceTransformer('all-MiniLM-L6-v2', device='cpu')  # Add device parameter
+documents = pickle.load(open("data/documents.pkl", "rb"))
+index = faiss.read_index("data/faiss_index.index")
+
+# Add keepalive endpoint
+@app.get("/ping")
+async def ping():
+    return {"status": "ready"}
 
 app = FastAPI()
 
@@ -36,19 +44,20 @@ class Query(BaseModel):
 # Update CORS configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # Allow all methods
-    allow_headers=["*"],  # Allow all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-# Mount static files
-app.mount("/static", StaticFiles(directory="Backend/static"), name="static")
+# Mount static files with correct path
+static_dir = os.path.join(os.path.dirname(__file__), "static")
+app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 # Serve index.html at root
 @app.get("/")
 async def read_root():
-    return FileResponse(os.path.join("Backend", "static", "index.html"))
+    return FileResponse(os.path.join(static_dir, "index.html"))
 
 # Remove the duplicate home() route:
 # @app.get("/")

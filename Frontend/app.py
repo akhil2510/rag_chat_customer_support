@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+import time
 
 BACKEND_URL = "https://rag-chat-customer-support-1.onrender.com"
 
@@ -42,25 +43,32 @@ for message in st.session_state.messages:
 # Chat input
 question = st.text_input("Ask a question:", key="question_input")
 
+
 if st.button("Send", key="send_button") and question:
-    # Add user message to chat
+    start_time = time.time()
     st.session_state.messages.append({"role": "user", "content": question})
     
     try:
-        with st.spinner("Thinking... (First request may take longer)"):
+        # First check if backend is awake
+        requests.get(f"{BACKEND_URL}/ping", timeout=5)
+        
+        with st.spinner("Thinking..."):
             res = requests.post(
                 f"{BACKEND_URL}/ask",
                 json={"question": question},
                 headers={"Content-Type": "application/json"},
-                timeout=120  # Increased timeout for cold starts
+                timeout=15  # Reduced timeout
             )
-            answer = res.json().get("answer", "I apologize, but I couldn't process that request.")
-            # Add bot response to chat
+            answer = res.json().get("answer")
             st.session_state.messages.append({"role": "assistant", "content": answer})
             
-        # Rerun to update chat display
-        st.experimental_rerun()
-            
+    except requests.exceptions.Timeout:
+        st.error("Server timeout - please try again")
+    except Exception as e:
+        st.error(f"Error: {str(e)}")
+    
+    st.write(f"⏱️ Response time: {time.time()-start_time:.1f}s")
+    
     except requests.exceptions.Timeout:
         error_msg = "The server is still starting up. Please wait a minute and try again."
         st.session_state.messages.append({"role": "assistant", "content": error_msg})

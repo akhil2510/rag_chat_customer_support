@@ -14,6 +14,7 @@ PAGES = [
     BASE_URL + "/account-opening",
     BASE_URL + "/funds",
     BASE_URL + "/ipo",
+    BASE_URL + "/stocks",
     # Add more URLs after crawling
 ]
 
