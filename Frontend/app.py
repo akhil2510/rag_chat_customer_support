@@ -1,12 +1,7 @@
 import streamlit as st
 import requests
-import os
-from dotenv import load_dotenv
 
-load_dotenv()
-
-# Use environment variable for backend URL
-BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
+BACKEND_URL = "https://rag-chat-customer-support-1.onrender.com"
 
 st.set_page_config(page_title="Support RAG Bot", layout="centered")
 st.title("💬 AngelOne Support Chatbot")
