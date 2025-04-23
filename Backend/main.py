@@ -29,13 +29,17 @@ model = SentenceTransformer('all-MiniLM-L6-v2')
 
 app = FastAPI()
 
-# Mount static files (relative to this file's directory)
+# Define Query class before it's used
+class Query(BaseModel):
+    question: str
+
+# Mount static files
 app.mount("/static", StaticFiles(directory="Backend/static"), name="static")
 
 # Serve index.html at root
 @app.get("/")
 async def read_root():
-    return FileResponse("Backend/static/index.html")
+    return FileResponse(os.path.join("Backend", "static", "index.html"))
 
 # Remove the duplicate home() route:
 # @app.get("/")
