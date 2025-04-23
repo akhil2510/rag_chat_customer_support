@@ -15,8 +15,8 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 os.environ["TOKENIZERS_PARALLELISM"] = os.getenv("TOKENIZERS_PARALLELISM", "false")
 
 # Load data
-documents = pickle.load(open("../data_preparation/data/documents.pkl", "rb"))
-index = faiss.read_index("../data_preparation/data/faiss_index.index")
+documents = pickle.load(open("data_preparation/data/documents.pkl", "rb"))
+index = faiss.read_index("data_preparation/data/faiss_index.index")
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
 app = FastAPI()
