@@ -33,6 +33,15 @@ app = FastAPI()
 class Query(BaseModel):
     question: str
 
+# Update CORS configuration
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all methods
+    allow_headers=["*"],  # Allow all headers
+)
+
 # Mount static files
 app.mount("/static", StaticFiles(directory="Backend/static"), name="static")
 
