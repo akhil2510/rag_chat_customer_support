@@ -60,14 +60,5 @@ async def ask(query: Query):
     answer = response.choices[0].message.content
     return {"answer": answer.strip()}
 
-# Add this to make the app run when the file is executed directly
-if __name__ == "__main__":
-    import uvicorn
-    port = int(os.getenv("PORT", 10000))  # Changed default port to 10000
-    uvicorn.run(
-        app, 
-        host="0.0.0.0", 
-        port=port,
-        workers=4,  # Number of worker processes
-        timeout_keep_alive=120  # Keep-alive timeout
-    )
+# Remove the if __name__ == "__main__" block completely
+# The application will be run by Gunicorn instead
