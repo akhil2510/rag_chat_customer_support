@@ -68,7 +68,6 @@ if __name__ == "__main__":
         app, 
         host="0.0.0.0", 
         port=port,
-        timeout_keep_alive=120,  # Increased keep-alive timeout
         workers=4,  # Number of worker processes
-        timeout=120  # Request timeout
+        timeout_keep_alive=120  # Keep-alive timeout
     )
