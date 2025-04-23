@@ -1,7 +1,11 @@
 fastapi
 uvicorn
-openai
+pydantic
 python-dotenv
+openai
+faiss-cpu
+sentence-transformers
+numpy
 langchain
 faiss-cpu
 sentence-transformers
