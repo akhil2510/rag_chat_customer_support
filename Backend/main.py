@@ -39,6 +39,11 @@ app.add_middleware(
 class Query(BaseModel):
     question: str
 
+@app.get("/")
+def home():
+    return {"message": "Hello from RAG Chatbot!"}
+
+    
 @app.post("/ask")
 async def ask(query: Query):
     question = query.question
@@ -60,5 +65,4 @@ async def ask(query: Query):
     answer = response.choices[0].message.content
     return {"answer": answer.strip()}
 
-# Remove the if __name__ == "__main__" block completely
-# The application will be run by Gunicorn instead
+# Remove the if __name__ == "__main__" block completely# The application will be run by Gunicorn instead
