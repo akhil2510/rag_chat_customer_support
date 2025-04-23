@@ -63,5 +63,12 @@ async def ask(query: Query):
 # Add this to make the app run when the file is executed directly
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.getenv("PORT", 8000))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    port = int(os.getenv("PORT", 10000))  # Changed default port to 10000
+    uvicorn.run(
+        app, 
+        host="0.0.0.0", 
+        port=port,
+        timeout_keep_alive=120,  # Increased keep-alive timeout
+        workers=4,  # Number of worker processes
+        timeout=120  # Request timeout
+    )
