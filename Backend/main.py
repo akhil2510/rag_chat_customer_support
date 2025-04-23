@@ -29,28 +29,18 @@ model = SentenceTransformer('all-MiniLM-L6-v2')
 
 app = FastAPI()
 
-# Mount static files
+# Mount static files (relative to this file's directory)
 app.mount("/static", StaticFiles(directory="Backend/static"), name="static")
 
-# Update CORS configuration
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
+# Serve index.html at root
 @app.get("/")
 async def read_root():
-    return FileResponse("static/index.html")
+    return FileResponse("Backend/static/index.html")
 
-class Query(BaseModel):
-    question: str
-
-@app.get("/")
-def home():
-    return {"message": "Hello from RAG Chatbot!"}
+# Remove the duplicate home() route:
+# @app.get("/")
+# def home():
+#     return {"message": "Hello from RAG Chatbot!"}
 
     
 @app.post("/ask")
