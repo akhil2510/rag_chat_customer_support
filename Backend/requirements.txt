@@ -9,3 +9,4 @@ numpy
 langchain
 faiss-cpu
 sentence-transformers
+huggingface_hub
