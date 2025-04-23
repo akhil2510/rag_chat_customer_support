@@ -30,7 +30,7 @@ model = SentenceTransformer('all-MiniLM-L6-v2')
 app = FastAPI()
 
 # Mount static files
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="Backend/static"), name="static")
 
 # Update CORS configuration
 app.add_middleware(
