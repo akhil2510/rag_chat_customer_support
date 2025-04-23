@@ -15,8 +15,14 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 os.environ["TOKENIZERS_PARALLELISM"] = os.getenv("TOKENIZERS_PARALLELISM", "false")
 
 # Load data
-documents = pickle.load(open("data_preparation/data/documents.pkl", "rb"))
-index = faiss.read_index("data_preparation/data/faiss_index.index")
+try:
+    documents = pickle.load(open("data_preparation/data/documents.pkl", "rb"))
+    index = faiss.read_index("data_preparation/data/faiss_index.index")
+except FileNotFoundError:
+    # Try alternative paths for deployment
+    documents = pickle.load(open("../data_preparation/data/documents.pkl", "rb"))
+    index = faiss.read_index("../data_preparation/data/faiss_index.index")
+
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
 app = FastAPI()
@@ -53,3 +59,9 @@ async def ask(query: Query):
     )
     answer = response.choices[0].message.content
     return {"answer": answer.strip()}
+
+# Add this to make the app run when the file is executed directly
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
