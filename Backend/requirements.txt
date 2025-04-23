@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+openai
+python-dotenv
+langchain
+faiss-cpu
+sentence-transformers
