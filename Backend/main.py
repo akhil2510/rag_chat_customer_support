@@ -30,11 +30,6 @@ model = SentenceTransformer('all-MiniLM-L6-v2', device='cpu')  # Add device para
 documents = pickle.load(open("data/documents.pkl", "rb"))
 index = faiss.read_index("data/faiss_index.index")
 
-# Add keepalive endpoint
-@app.get("/ping")
-async def ping():
-    return {"status": "ready"}
-
 app = FastAPI()
 
 # Define Query class before it's used
@@ -54,6 +49,12 @@ app.add_middleware(
 static_dir = os.path.join(os.path.dirname(__file__), "static")
 app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
+
+# Add keepalive endpoint
+@app.get("/ping")
+async def ping():
+    return {"status": "ready"}
+    
 # Serve index.html at root
 @app.get("/")
 async def read_root():
